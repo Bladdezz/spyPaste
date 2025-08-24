@@ -17,6 +17,14 @@ struct ClipboardMenuView: View {
                 .font(.headline)
                 .padding(.bottom, 5)
 
+            Toggle("Enable Clipboard Logging", isOn: $monitor.isLoggingEnabled)
+                .font(.subheadline)
+                .padding(.bottom, 2)
+
+            Toggle("Enable File Monitoring", isOn: $monitor.isFileMonitoringEnabled)
+                .font(.subheadline)
+                .padding(.bottom, 5)
+
             List(monitor.history.prefix(10)) { item in
                 HStack(alignment: .top) {
                     VStack(alignment: .leading) {
