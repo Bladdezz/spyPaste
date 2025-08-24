@@ -19,13 +19,26 @@ struct ClipboardMenuView: View {
 
             Toggle("Enable Clipboard Logging", isOn: $monitor.isLoggingEnabled)
                 .font(.subheadline)
+                .padding(.bottom, 2)
+
+            Toggle("Enable File Monitoring", isOn: $monitor.isFileMonitoringEnabled)
+                .font(.subheadline)
                 .padding(.bottom, 5)
 
             List(monitor.history.prefix(10)) { item in
                 VStack(alignment: .leading) {
-                    Text(item.content)
-                        .font(.body)
-                        .lineLimit(2)
+                    switch item.content {
+                    case .text(let text):
+                        Text(text)
+                            .font(.body)
+                            .lineLimit(2)
+                    case .files(let files):
+                        ForEach(files, id: \.self) { file in
+                            Text(file.lastPathComponent)
+                                .font(.body)
+                                .lineLimit(1)
+                        }
+                    }
                     Text(item.timestamp.formatted(date: .numeric, time: .shortened))
                         .font(.caption)
                         .foregroundColor(.gray)
