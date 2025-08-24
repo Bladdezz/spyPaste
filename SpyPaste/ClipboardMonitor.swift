@@ -56,4 +56,15 @@ class ClipboardMonitor: ObservableObject {
             }
         }
     }
+
+    func setClipboard(to item: ClipboardItem) {
+        let pasteboard = NSPasteboard.general
+        pasteboard.clearContents()
+        switch item.content {
+        case .text(let text):
+            pasteboard.setString(text, forType: .string)
+        case .files(let files):
+            pasteboard.writeObjects(files as [NSURL])
+        }
+    }
 }
