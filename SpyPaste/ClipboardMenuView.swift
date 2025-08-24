@@ -10,6 +10,8 @@ import SwiftUI
 
 struct ClipboardMenuView: View {
     @ObservedObject var monitor: ClipboardMonitor
+    @AppStorage("maxClipboardEntries") private var maxClipboardEntries: Int = 10
+    @State private var maxEntriesInput: String = "10"
 
     var body: some View {
         VStack(alignment: .leading) {
@@ -17,15 +19,41 @@ struct ClipboardMenuView: View {
                 .font(.headline)
                 .padding(.bottom, 5)
 
-            Toggle("Enable Clipboard Logging", isOn: $monitor.isLoggingEnabled)
-                .font(.subheadline)
-                .padding(.bottom, 2)
+            Menu("Preferences") {
+                Toggle("Enable Clipboard Logging", isOn: $monitor.isLoggingEnabled)
+                Toggle("Enable File Monitoring", isOn: $monitor.isFileMonitoringEnabled)
+                Divider()
+                HStack {
+                    Text("Max Clipboard Entries:")
+                    TextField(
+                        "",
+                        text: Binding(
+                            get: {
+                                maxEntriesInput
+                            },
+                            set: { newValue in
+                                // Allow only numbers and clamp between 1 and 100
+                                let filtered = newValue.filter { $0.isNumber }
+                                if let intVal = Int(filtered), intVal >= 1, intVal <= 100 {
+                                    maxClipboardEntries = intVal
+                                    maxEntriesInput = filtered
+                                } else if filtered.isEmpty {
+                                    maxEntriesInput = ""
+                                }
+                            }
+                        )
+                    )
+                    .frame(width: 40)
+                    .multilineTextAlignment(.trailing)
+                    .onAppear {
+                        maxEntriesInput = "\(maxClipboardEntries)"
+                    }
+                }
+            }
+            .font(.subheadline)
+            .padding(.bottom, 5)
 
-            Toggle("Enable File Monitoring", isOn: $monitor.isFileMonitoringEnabled)
-                .font(.subheadline)
-                .padding(.bottom, 5)
-
-            List(monitor.history.prefix(10)) { item in
+            List(monitor.history.prefix(maxClipboardEntries)) { item in
                 HStack(alignment: .top) {
                     VStack(alignment: .leading) {
                         switch item.content {
@@ -64,6 +92,8 @@ struct ClipboardMenuView: View {
                 .padding(.vertical, 4)
             }
             .listStyle(PlainListStyle())
+
+            Spacer(minLength: 16) // Add padding at the bottom for Quit button spacing
         }
         .frame(width: 300, height: 400)
         .padding()

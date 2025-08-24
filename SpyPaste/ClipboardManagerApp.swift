@@ -20,6 +20,8 @@ struct ClipboardManagerApp: App {
                 NSApplication.shared.terminate(nil)
             }
             .keyboardShortcut("q")
+            
+            Spacer(minLength: 16)
         }
         .menuBarExtraStyle(.window)
     }

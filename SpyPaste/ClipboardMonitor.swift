@@ -13,7 +13,7 @@ import Combine
 class ClipboardMonitor: ObservableObject {
     @Published var history: [ClipboardItem] = []
     @Published var isLoggingEnabled = true
-    @Published var isFileMonitoringEnabled = false
+    @Published var isFileMonitoringEnabled = true
 
     private var lastChangeCount = NSPasteboard.general.changeCount
     private var cancellable: AnyCancellable?

@@ -29,9 +29,22 @@
 		D88A5A472E56545300FE71ED /* SpyPasteUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SpyPasteUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		D8E7CE692E5BB621003BD54D /* Exceptions for "SpyPaste" folder in "SpyPaste" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = D88A5A2E2E56545200FE71ED /* SpyPaste */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		D88A5A312E56545200FE71ED /* SpyPaste */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				D8E7CE692E5BB621003BD54D /* Exceptions for "SpyPaste" folder in "SpyPaste" target */,
+			);
 			path = SpyPaste;
 			sourceTree = "<group>";
 		};
