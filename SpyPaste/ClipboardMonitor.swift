@@ -14,6 +14,7 @@ class ClipboardMonitor: ObservableObject {
     @Published var history: [ClipboardItem] = []
     @Published var isLoggingEnabled = true
     @Published var isFileMonitoringEnabled = false
+
     private var lastChangeCount = NSPasteboard.general.changeCount
     private var cancellable: AnyCancellable?
 
@@ -21,7 +22,7 @@ class ClipboardMonitor: ObservableObject {
         startMonitoring()
     }
 
-    func startMonitoring() {
+    private func startMonitoring() {
         cancellable = Timer.publish(every: 1.0, on: .main, in: .common)
             .autoconnect()
             .sink { [weak self] _ in
@@ -29,7 +30,7 @@ class ClipboardMonitor: ObservableObject {
             }
     }
 
-    func checkClipboard() {
+    private func checkClipboard() {
         guard isLoggingEnabled else { return }
         let pasteboard = NSPasteboard.general
         if pasteboard.changeCount != lastChangeCount {
@@ -67,4 +68,8 @@ class ClipboardMonitor: ObservableObject {
             pasteboard.writeObjects(files as [NSURL])
         }
     }
+}
+
+class AppState: ObservableObject {
+    @Published var showPreferences = false
 }

@@ -11,13 +11,13 @@ import SwiftUI
 @main
 struct ClipboardManagerApp: App {
     @StateObject private var monitor = ClipboardMonitor()
-    @State private var showPreferences = false
     private let urlHandler = URLHandler()
+    @State private var showPreferences = false
 
     init() {
-        urlHandler.openPreferences = { [weak self] in
+        urlHandler.openPreferences = {
             DispatchQueue.main.async {
-                self?.showPreferences = true
+                self.showPreferences = true
             }
         }
     }
