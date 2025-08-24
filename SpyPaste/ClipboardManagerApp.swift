@@ -12,9 +12,17 @@ import SwiftUI
 struct ClipboardManagerApp: App {
     @StateObject private var monitor = ClipboardMonitor()
     @State private var showPreferences = false
+    private let urlHandler = URLHandler()
+
+    init() {
+        urlHandler.openPreferences = { [weak self] in
+            DispatchQueue.main.async {
+                self?.showPreferences = true
+            }
+        }
+    }
 
     var body: some Scene {
-        // Menu bar extra for clipboard history
         MenuBarExtra("📋 ClipLog", systemImage: "doc.on.clipboard") {
             ClipboardMenuView(monitor: monitor)
             Divider()
@@ -29,10 +37,8 @@ struct ClipboardManagerApp: App {
         }
         .menuBarExtraStyle(.window)
 
-        // Preferences window
         Window("Preferences", id: "preferences", isPresented: $showPreferences) {
             PreferencesView(monitor: monitor)
         }
-        .windowResizability(.contentSize)
     }
 }
