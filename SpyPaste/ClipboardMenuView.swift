@@ -35,9 +35,16 @@ struct ClipboardMenuView: View {
                                 .lineLimit(2)
                         case .files(let files):
                             ForEach(files, id: \.self) { file in
-                                Text(file.lastPathComponent)
-                                    .font(.body)
-                                    .lineLimit(1)
+                                HStack {
+                                    Text(file.lastPathComponent)
+                                        .font(.body)
+                                        .lineLimit(1)
+                                    if let size = try? FileManager.default.attributesOfItem(atPath: file.path)[.size] as? NSNumber {
+                                        Text("(\(ByteCountFormatter.string(fromByteCount: size.int64Value, countStyle: .file)))")
+                                            .font(.caption)
+                                            .foregroundColor(.gray)
+                                    }
+                                }
                             }
                         }
                         Text(item.timestamp.formatted(date: .numeric, time: .shortened))
