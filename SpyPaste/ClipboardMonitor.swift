@@ -1,22 +1,35 @@
+//
+//  ClipboardMonitor.swift
+//  SpyPaste
+//
+//  Created by nathan on 8/20/25.
+//
+
+
 import Foundation
 import AppKit
+import Combine
 
 class ClipboardMonitor: ObservableObject {
     @Published var history: [ClipboardItem] = []
+    @Published var isLoggingEnabled = true
     private var lastChangeCount = NSPasteboard.general.changeCount
-    private var timer: Timer?
+    private var cancellable: AnyCancellable?
 
     init() {
         startMonitoring()
     }
 
     func startMonitoring() {
-        timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { _ in
-            self.checkClipboard()
-        }
+        cancellable = Timer.publish(every: 1.0, on: .main, in: .common)
+            .autoconnect()
+            .sink { [weak self] _ in
+                self?.checkClipboard()
+            }
     }
 
     func checkClipboard() {
+        guard isLoggingEnabled else { return }
         let pasteboard = NSPasteboard.general
         if pasteboard.changeCount != lastChangeCount {
             lastChangeCount = pasteboard.changeCount
