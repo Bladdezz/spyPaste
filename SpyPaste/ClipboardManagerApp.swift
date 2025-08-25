@@ -16,6 +16,7 @@ struct ClipboardManagerApp: App {
         MenuBarExtra("📋 ClipLog", systemImage: "doc.on.clipboard") {
             ClipboardMenuView(monitor: monitor)
             Divider()
+            Divider()
             HStack {
                 Button("Clear History") {
                     monitor.history.removeAll()

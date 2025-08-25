@@ -47,14 +47,15 @@ struct ClipboardMenuView: View {
     
     private func historyListView() -> some View {
         List {
-            ForEach(monitor.history.prefix(maxClipboardEntries), id: \.self) { item in
-                historyItemView(item: item)
+            let reversedHistory = Array(monitor.history.prefix(maxClipboardEntries).reversed())
+            ForEach(Array(reversedHistory.enumerated()), id: \.element) { (index, item) in
+                historyItemView(item: item, index: index)
             }
         }
         .listStyle(PlainListStyle())
     }
     
-    private func historyItemView(item: ClipboardHistoryItem) -> some View {
+    private func historyItemView(item: ClipboardHistoryItem, index: Int) -> some View {
         HStack(alignment: .top, spacing: 10) {
             VStack(alignment: .leading, spacing: 5) {
                 if preserveFormatting {
@@ -104,14 +105,12 @@ struct ClipboardMenuView: View {
                     .foregroundColor(.gray)
             }
             Spacer()
-            Button(action: {
-                monitor.setClipboard(to: item)
-            }) {
-                Image(systemName: "arrow.uturn.backward.circle")
-                    .imageScale(.large)
-                    .help("Copy to Clipboard")
+            // Show hotkey for the first 5 entries
+            if index < 5 {
+                Text("⌘\(index + 1)")
+                    .font(.caption)
+                    .foregroundColor(.accentColor)
             }
-            .buttonStyle(BorderlessButtonStyle())
         }
         .padding(.vertical, 4)
     }
