@@ -21,7 +21,7 @@ struct ClipboardMenuView: View {
                 Slider(value: Binding(
                     get: { Double(maxClipboardEntries) },
                     set: { maxClipboardEntries = Int($0) }
-                ), in: 5...50, step: 1)
+                ), in: 5...50, step: 5)
             }
             preferencesMenu()
             historyListView()
