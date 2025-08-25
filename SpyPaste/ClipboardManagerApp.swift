@@ -16,11 +16,16 @@ struct ClipboardManagerApp: App {
         MenuBarExtra("📋 ClipLog", systemImage: "doc.on.clipboard") {
             ClipboardMenuView(monitor: monitor)
             Divider()
-            Button("Quit") {
-                NSApplication.shared.terminate(nil)
+            HStack {
+                Button("Clear History") {
+                    monitor.history.removeAll()
+                    NSPasteboard.general.clearContents()
+                }
+                Button("Quit") {
+                    NSApplication.shared.terminate(nil)
+                }
+                .keyboardShortcut("q")
             }
-            .keyboardShortcut("q")
-            
             Spacer(minLength: 16)
         }
         .menuBarExtraStyle(.window)

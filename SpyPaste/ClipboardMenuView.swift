@@ -15,6 +15,14 @@ struct ClipboardMenuView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 20) {
             headerView()
+            VStack(alignment: .leading) {
+                Text("Maximum Clipboard Entries: \(maxClipboardEntries)")
+                    .foregroundColor(.gray)
+                Slider(value: Binding(
+                    get: { Double(maxClipboardEntries) },
+                    set: { maxClipboardEntries = Int($0) }
+                ), in: 5...50, step: 1)
+            }
             preferencesMenu()
             historyListView()
             Spacer(minLength: 16) // Add padding at the bottom for Quit button spacing
@@ -32,15 +40,7 @@ struct ClipboardMenuView: View {
         Menu("Preferences") {
             Toggle("Enable Clipboard Logging", isOn: $monitor.isLoggingEnabled)
             Toggle("Enable File Monitoring", isOn: $monitor.isFileMonitoringEnabled)
-            Divider()
-            HStack(spacing: 10) {
-                Text("Max Clipboard Entries:")
-                Text("\(maxClipboardEntries)")
-                    .foregroundColor(.gray)
-                    .padding(.leading, 5) // Add some padding next to the text
-                
-                Toggle("Preserve Formatting", isOn: $preserveFormatting)
-            }
+            Toggle("Preserve Formatting", isOn: $preserveFormatting)
         }
         .font(.subheadline)
     }
@@ -83,7 +83,7 @@ struct ClipboardMenuView: View {
                         Text(text)
                             .font(.body)
                             .lineLimit(2)
-                            .textContentType(.plainText) // Convert to plain text
+                            .textContentType(.none) // No content type
                     case .files(let files):
                         ForEach(files, id: \.self) { file in
                             HStack {

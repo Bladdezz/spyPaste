@@ -5,7 +5,7 @@ struct ClipboardHistoryItem: Hashable {
     var content: Content
     var timestamp: Date
     
-    enum Content: Equatable {
+    enum Content: Hashable {
         case text(String)
         case files([URL])
     }
