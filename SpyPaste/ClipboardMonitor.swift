@@ -2,7 +2,7 @@
 //  ClipboardMonitor.swift
 //  SpyPaste
 //
-//  Created by nathan on 8/20/25.
+//  Created by bladdezz on 8/20/25.
 //
 
 
