@@ -11,41 +11,28 @@ import SwiftUI
 struct ClipboardMenuView: View {
     @ObservedObject var monitor: ClipboardMonitor
     @AppStorage("maxClipboardEntries") private var maxClipboardEntries: Int = 10
-    @State private var maxEntriesInput: String = "10"
 
     var body: some View {
-        VStack(alignment: .leading) {
+        VStack(alignment: .leading, spacing: 20) {
             Text("Clipboard History")
                 .font(.headline)
-                .padding(.bottom, 5)
-
+            
             Menu("Preferences") {
                 Toggle("Enable Clipboard Logging", isOn: $monitor.isLoggingEnabled)
                 Toggle("Enable File Monitoring", isOn: $monitor.isFileMonitoringEnabled)
                 Divider()
-                HStack {
+                HStack(spacing: 10) {
                     Text("Max Clipboard Entries:")
-                    Slider(
-                        value: Binding(
-                            get: { Float(maxClipboardEntries) },
-                            set: { newValue in
-                                let clampedValue = Int(max(5, min(100, Double(newValue))))
-                                maxClipboardEntries = clampedValue
-                                maxEntriesInput = "\(clampedValue)"
-                            }
-                        ),
-                        in: 5...100,
-                        step: 1
-                    )
-                    .frame(width: 200) // Adjust the width as needed
+                    Text("\(maxClipboardEntries)")
+                        .foregroundColor(.gray)
+                        .padding(.leading, 5) // Add some padding next to the text
                 }
             }
             .font(.subheadline)
-            .padding(.bottom, 5)
-
+            
             List(monitor.history.prefix(maxClipboardEntries)) { item in
-                HStack(alignment: .top) {
-                    VStack(alignment: .leading) {
+                HStack(alignment: .top, spacing: 10) {
+                    VStack(alignment: .leading, spacing: 5) {
                         switch item.content {
                         case .text(let text):
                             Text(text)
@@ -82,7 +69,7 @@ struct ClipboardMenuView: View {
                 .padding(.vertical, 4)
             }
             .listStyle(PlainListStyle())
-
+            
             Spacer(minLength: 16) // Add padding at the bottom for Quit button spacing
         }
         .frame(width: 300, height: 400)
