@@ -11,7 +11,7 @@ import AppKit
 import Combine
 
 class ClipboardMonitor: ObservableObject {
-    @Published var history: [ClipboardItem] = []
+    @Published var history: [ClipboardHistoryItem] = []
     @Published var isLoggingEnabled = true
     @Published var isFileMonitoringEnabled = true
 
@@ -39,7 +39,7 @@ class ClipboardMonitor: ObservableObject {
             // Check for text
             if let copiedText = pasteboard.string(forType: .string),
                !copiedText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-                let item = ClipboardItem(content: .text(copiedText), timestamp: Date())
+                let item = ClipboardHistoryItem(content: .text(copiedText), timestamp: Date())
                 DispatchQueue.main.async {
                     self.history.insert(item, at: 0)
                 }
@@ -50,7 +50,7 @@ class ClipboardMonitor: ObservableObject {
             if isFileMonitoringEnabled,
                let files = pasteboard.readObjects(forClasses: [NSURL.self], options: nil) as? [URL],
                !files.isEmpty {
-                let item = ClipboardItem(content: .files(files), timestamp: Date())
+                let item = ClipboardHistoryItem(content: .files(files), timestamp: Date())
                 DispatchQueue.main.async {
                     self.history.insert(item, at: 0)
                 }
@@ -58,7 +58,7 @@ class ClipboardMonitor: ObservableObject {
         }
     }
 
-    func setClipboard(to item: ClipboardItem) {
+    func setClipboard(to item: ClipboardHistoryItem) {
         let pasteboard = NSPasteboard.general
         pasteboard.clearContents()
         switch item.content {
