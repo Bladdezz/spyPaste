@@ -25,29 +25,19 @@ struct ClipboardMenuView: View {
                 Divider()
                 HStack {
                     Text("Max Clipboard Entries:")
-                    TextField(
-                        "",
-                        text: Binding(
-                            get: {
-                                maxEntriesInput
-                            },
+                    Slider(
+                        value: Binding(
+                            get: { Float(maxClipboardEntries) },
                             set: { newValue in
-                                // Allow only numbers and clamp between 1 and 100
-                                let filtered = newValue.filter { $0.isNumber }
-                                if let intVal = Int(filtered), intVal >= 1, intVal <= 100 {
-                                    maxClipboardEntries = intVal
-                                    maxEntriesInput = filtered
-                                } else if filtered.isEmpty {
-                                    maxEntriesInput = ""
-                                }
+                                let clampedValue = Int(max(5, min(100, Double(newValue))))
+                                maxClipboardEntries = clampedValue
+                                maxEntriesInput = "\(clampedValue)"
                             }
-                        )
+                        ),
+                        in: 5...100,
+                        step: 1
                     )
-                    .frame(width: 40)
-                    .multilineTextAlignment(.trailing)
-                    .onAppear {
-                        maxEntriesInput = "\(maxClipboardEntries)"
-                    }
+                    .frame(width: 200) // Adjust the width as needed
                 }
             }
             .font(.subheadline)
