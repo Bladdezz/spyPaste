@@ -11,10 +11,15 @@ struct ClipboardMenuView: View {
     @ObservedObject var monitor: ClipboardMonitor
     @AppStorage("maxClipboardEntries") private var maxClipboardEntries: Int = 10
     @State private var preserveFormatting: Bool = true
+    @ObservedObject var monitor: ClipboardMonitor
+    @AppStorage("maxClipboardEntries") private var maxClipboardEntries: Int = 10
+    @State private var preserveFormatting: Bool = true
 
     var body: some View {
         VStack(alignment: .leading, spacing: 20) {
             headerView()
+            // Private Session controls (if you want to keep them, otherwise remove)
+            // ...
             VStack(alignment: .leading) {
                 Text("Maximum Clipboard Entries: \(maxClipboardEntries)")
                     .foregroundColor(.gray)
@@ -43,6 +48,7 @@ struct ClipboardMenuView: View {
             Toggle("Preserve Formatting", isOn: $preserveFormatting)
         }
         .font(.subheadline)
+    }
     }
     
     private func historyListView() -> some View {
